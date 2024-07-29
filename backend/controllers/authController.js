@@ -16,7 +16,6 @@ export const register = async (req, res) => {
         });
     }
 
-    console.log(validator.contains(user.email, "ves.ac.in"))
     if(!validator.isEmail(user.email) || !validator.contains(user.email, "ves.ac.in")) {
         return res.status(400).json({
             success: false,
@@ -57,13 +56,16 @@ export const register = async (req, res) => {
             message: "User created successfully",
         });
     } catch (error) {
-        return res.status(500).json({message: error.message});
+        console.log("Error in authController (register)", error.message)
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error"
+        });
     }
 }
 
 export const login = async (req, res) => {
     const user = req.body;
-    console.log(user)
 
     if(!user.email || !user.password) {
         return res.status(400).json({message: "All fields are required"});
@@ -103,9 +105,10 @@ export const login = async (req, res) => {
             }
         });
     } catch (error) {
+        console.log("Error in authController (login)", error.message)
         return res.status(500).json({
             success: false,
-            message: error.message,
+            message: "Internal Server Error",
         });
     }
 }
@@ -121,6 +124,7 @@ export const logout = (req, res) => {
             .status(200)
             .json({message: "Logout successful"});
     } catch (error) {
-        return res.status(500).json({message: error.message});
+        console.log("Error in authController (logout)", error.message)
+        return res.status(500).json({message: "Internal Server Error"});
     }
 }

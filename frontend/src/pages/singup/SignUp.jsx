@@ -18,7 +18,6 @@ const SignUp = () => {
       [e.target.name]: e.target.value
     })
   }
-  console.log(user);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -58,8 +57,8 @@ const SignUp = () => {
     <div className='h-screen flex flex-col gap-2 justify-center items-center mx-auto w-[85%] md:w-[25%]'>
           <h1 className=' font-bold text-3xl mb-5'>Sign Up</h1>
           <div className='flex flex-col gap-3 rounded-md w-full'>
-            <input onChange={handleChange} className='p-2 rounded-md border-2' name='userName' type="email" placeholder='Enter Username' />
-            <input onChange={handleChange} className='p-2 rounded-md border-2' name='fullName' type="email" placeholder='Enter Full Name' />
+            <input onChange={handleChange} className='p-2 rounded-md border-2' name='userName' type="text" placeholder='Enter Username' />
+            <input onChange={handleChange} className='p-2 rounded-md border-2' name='fullName' type="text" placeholder='Enter Full Name' />
             <input onChange={handleChange} className='p-2 rounded-md border-2' name='email' type="email" placeholder='Enter Email' />
             <input onChange={handleChange} className='p-2 rounded-md border-2' name='password' type="password" placeholder='Enter Password' />
             <input onChange={handleChange} className='p-2 rounded-md border-2' name='confirmPassword' type="password" placeholder='Confirm Password' />

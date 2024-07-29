@@ -15,7 +15,6 @@ const SignIn = () => {
       [e.target.name]: e.target.value
     })
   }
-  console.log(user);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
