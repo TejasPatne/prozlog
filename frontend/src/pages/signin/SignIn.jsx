@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
-import toast from 'react-hot-toast';
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { useSignIn } from '../../hooks/useSignIn.jsx';
+import { Spinner } from '../../assets/Loading.jsx';
 
 const SignIn = () => {
   const [user, setUser] = useState({
     email: "",
     password: ""
   });
-  const navigate = useNavigate();
+
+  const {loading, signin} = useSignIn();
 
   const handleChange = (e) => {
     setUser({
@@ -18,29 +20,7 @@ const SignIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(!user.email || !user.password){
-      toast.error("All fields are required");
-      return;
-    }
-    try {
-      const res = await fetch("/api/v1/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(user)
-      })
-      const data = await res.json();
-      
-      if(data.success === true){
-        toast.success(data.message);
-        navigate("/");
-      } else {
-        toast.error(data.message);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
+    signin(user);
   }
   return (
     <div className='h-screen flex flex-col gap-2 justify-center items-center mx-auto w-[85%] md:w-[25%]'>
@@ -49,7 +29,11 @@ const SignIn = () => {
             <input onChange={handleChange} className='p-2 rounded-md border-2' name='email' type="email" placeholder='Enter Email' />
             <input onChange={handleChange} className='p-2 rounded-md border-2' name='password' type="password" placeholder='Enter Password' />
             <div>
-              <button onClick={handleSubmit} className='p-2 rounded-md bg-gray-700 text-white w-full hover:opacity-85 disabled:opacity-50'>Sign In</button>
+              <button disabled={loading} onClick={handleSubmit} className='p-2 rounded-md bg-gray-700 text-white w-full hover:opacity-90 disabled:opacity-75'>
+                {loading?
+                  <Spinner />
+                : "Sign In"}
+              </button>
               <Link to="/signup">Don&rsquo;t have an account?</Link>
             </div>
           </div>

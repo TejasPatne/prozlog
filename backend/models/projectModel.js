@@ -4,8 +4,8 @@ const projectSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
-        minLength: 10,
-        maxLength: 150
+        min: 10,
+        max: 150
     },
     domain: {
         type: String,

@@ -2,29 +2,21 @@ import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config/env.js";
 import Project from "../models/projectModel.js";
 import User from "../models/userModel.js";
+import { errorHandler } from "../utils/errorHandler.js";
 
-export const create = async (req, res) => {
+export const create = async (req, res, next) => {
     let project = req.body;
 
     if(!project.title || !project.domain || !project.description){
-        return res.status(400).json({
-            success: false,
-            message: "Please fill the required fields"
-        });
+        return next(errorHandler(400, "All fields are required"));
     }
 
     if(project.title.length < 10 || project.title.length > 150){
-        return res.status(400).json({
-            success: false,
-            message: "Title must be between 10 and 150 characters"
-        });
+        return next(errorHandler(400, "Title must be between 10 and 150 characters"));
     }
 
     if(project.mentors.length > 2 || project.team.length > 4){
-        return res.status(400).json({
-            success: false,
-            message: "Maximum of 2 mentors and 4 team members allowed"
-        });
+        return next(errorHandler(400, "Maximum of 2 mentors and 4 team members allowed"));
     }
 
     if(project.team.length !== 0){
@@ -35,24 +27,15 @@ export const create = async (req, res) => {
         });
         
         if(teamMembers.length !== project.team.length){
-            return res.status(400).json({
-                success: false,
-                message: "Team members not found"
-            });
+            return next(errorHandler(400, "Invalid team members"));
         }
         project.team = teamMembers;
     }
 
     try {
-        if(!req.cookies.token) return res.status(401).json({
-            success: false,
-            message: "Unauthorized"
-        });
+        if(!req.cookies.token) return next(errorHandler(401, "Unauthorized"));
         const validate = jwt.verify(req.cookies.token, JWT_SECRET);
-        if(!validate) return res.status(401).json({
-            success: false,
-            message: "Unauthorized"
-        });
+        if(!validate) return next(errorHandler(401, "Unauthorized"));
 
         const newProject = await Project.create(project);
         
@@ -64,25 +47,16 @@ export const create = async (req, res) => {
 
     } catch (error) {
         console.log("Error in projectController (create)", error.message);
-        return res.status(500).json({
-            succes: false,
-            message: "Internal Server Error"
-        });
+        return next(errorHandler(500, "Internal Server Error"));
     }
 }
 
-export const remove = async (req, res) => {
+export const remove = async (req, res, next) => {
     const { id } = req.params;
     try {
-        if(!req.cookies.token) return res.status(401).json({
-            success: false,
-            message: "Unauthorized"
-        });
+        if(!req.cookies.token) return next(errorHandler(401, "Unauthorized"));
         const validate = jwt.verify(req.cookies.token, JWT_SECRET);
-        if(!validate) return res.status(401).json({
-            success: false,
-            message: "Unauthorized"
-        });
+        if(!validate) return next(errorHandler(401, "Unauthorized"));
 
         await Project.findByIdAndDelete(id);
 
@@ -92,37 +66,22 @@ export const remove = async (req, res) => {
         })
     } catch (error) {
         console.log("Error in projectController (remove)", error.message);
-        return res.status(500).json({
-            success: false,
-            message: "Internal Server Error"
-        })
+        return next(errorHandler(500, "Internal Server Error"));
     }
 }
 
-export const update = async (req, res) => {
+export const update = async (req, res, next) => {
     const { id } = req.params;
     const project = req.body;
     try {
-        if(!req.cookies.token) return res.status(401).json({
-            success: false,
-            message: "Unauthorized"
-        });
+        if(!req.cookies.token) return next(errorHandler(401, "Unauthorized"));
         const validate = jwt.verify(req.cookies.token, JWT_SECRET);
-        if(!validate) return res.status(401).json({
-            success: false,
-            message: "Unauthorized"
-        });
+        if(!validate) return next(errorHandler(401, "Unauthorized"));
 
-        if(Object.entries(project).length === 0) return res.status(400).json({
-            success: false,
-            message: "No field was provided for update"
-        })
+        if(Object.entries(project).length === 0) return next(errorHandler(400, "All fields are required"));
         
         const existingProject = await Project.findById(id);
-        if(!existingProject) return res.status(400).json({
-            success: false,
-            message: "Project not found. Please create a new project"
-        });
+        if(!existingProject) return next(errorHandler(404, "Project not found"));
 
         if(project.team && project.team.length !== 0){
             const teamMembers = await User.find({
@@ -131,10 +90,7 @@ export const update = async (req, res) => {
                 }
             });
             if(teamMembers?.length !== project.team.length){
-                return res.status(400).json({
-                    success: false,
-                    message: "Team members not found. Please provide valid email of all team members"
-                });
+                return next(errorHandler(400, "Team members not found. Please provide valid email of all team members"))
             }
             project.team = teamMembers;
         }
@@ -151,36 +107,27 @@ export const update = async (req, res) => {
 
     } catch (error) {
         console.log("Error in projectControler (update)", error.message);
-        return res.status(500).json({
-            success: false,
-            message: "Internal Server Error"
-        })
+        return next(errorHandler(500, "Internal Server Error"));
     }
 }
 
-export const getProject = async (req, res) => {
+export const getProject = async (req, res, next) => {
     const { id } = req.params;
 
     try {
         const project = await Project.findById(id).populate("team");
-        if(!project) return res.status(400).json({
-            success: false,
-            message: "Project not found"
-        })
+        if(!project) return next(errorHandler(404, "Project not found"));
         return res.status(200).json({
             success: true,
             project
         })
     } catch (error) {
         console.log("Error in projectController (getProject)", error.message);
-        return res.status(500).json({
-            success: false,
-            message: "Internal Server Error"
-        })
+        return next(errorHandler(500, "Internal Server Error"));
     }
 }
 
-export const getAllProjects = async (req, res) => {
+export const getAllProjects = async (req, res, next) => {
     const { id } = req.params;
     const { search } = req.query;
 
@@ -211,9 +158,6 @@ export const getAllProjects = async (req, res) => {
         }
     } catch (error) {
         console.log("Error in projectController (getAllProjects)", error.message);
-        return res.status(500).json({
-            success: false,
-            message: "Internal Server Error"
-        })
+        return next(errorHandler(500, "Internal Server Error"));
     }
 }

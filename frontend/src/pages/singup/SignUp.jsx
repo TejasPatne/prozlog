@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import toast from 'react-hot-toast';
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { useSignUp } from '../../hooks/useSignUp';
+import { Spinner } from '../../assets/Loading';
 
 const SignUp = () => {
   const [user, setUser] = useState({
@@ -10,7 +11,8 @@ const SignUp = () => {
     password: "",
     confirmPassword: ""
   });
-  const navigate = useNavigate();
+  
+  const {loading, signup} = useSignUp();
 
   const handleChange = (e) => {
     setUser({
@@ -21,37 +23,7 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(!user.userName || user.userName.length < 4 || user.userName.length > 15){
-      toast.error("Username must be at least 4 characters long and less than 15 characters");
-      return;
-    }
-    if(!user.email || !user.password){
-      toast.error("All fields are required");
-      return;
-    }
-    if(user.password !== user.confirmPassword){
-      toast.error("Password does not match");
-      return;
-    }
-    try {
-      const res = await fetch("/api/v1/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(user)
-      })
-      const data = await res.json();
-      
-      if(data.success === true){
-        toast.success(data.message);
-        navigate("/");
-      } else {
-        toast.error(data.message);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
+    signup(user);
   }
   return (
     <div className='h-screen flex flex-col gap-2 justify-center items-center mx-auto w-[85%] md:w-[25%]'>
@@ -59,11 +31,15 @@ const SignUp = () => {
           <div className='flex flex-col gap-3 rounded-md w-full'>
             <input onChange={handleChange} className='p-2 rounded-md border-2' name='userName' type="text" placeholder='Enter Username' />
             <input onChange={handleChange} className='p-2 rounded-md border-2' name='fullName' type="text" placeholder='Enter Full Name' />
-            <input onChange={handleChange} className='p-2 rounded-md border-2' name='email' type="email" placeholder='Enter Email' />
+            <input onChange={handleChange} className='p-2 rounded-md border-2' name='email' type="email" placeholder='Enter VES Email ID' />
             <input onChange={handleChange} className='p-2 rounded-md border-2' name='password' type="password" placeholder='Enter Password' />
             <input onChange={handleChange} className='p-2 rounded-md border-2' name='confirmPassword' type="password" placeholder='Confirm Password' />
             <div>
-              <button onClick={handleSubmit} className='p-2 rounded-md bg-gray-700 text-white w-full hover:opacity-85 disabled:opacity-50'>Sign Up</button>
+              <button disabled={loading} onClick={handleSubmit} className='p-2 rounded-md bg-gray-700 text-white w-full hover:opacity-90 disabled:opacity-75'>
+                {loading?
+                  <Spinner />
+                : "Sign Up"}
+              </button>
               <Link to="/signin">Already have an account?</Link>
             </div>
           </div>

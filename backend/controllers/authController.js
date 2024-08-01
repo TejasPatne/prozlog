@@ -5,44 +5,30 @@ import jwt from 'jsonwebtoken';
 // file imports
 import User from "../models/userModel.js";
 import { JWT_SECRET } from '../config/env.js';
+import { errorHandler } from '../utils/errorHandler.js';
 
-export const register = async (req, res) => {
+export const register = async (req, res, next) => {
     const user = req.body;
 
     if(!user.userName || !user.fullName || !user.email || !user.password || !user.confirmPassword) {
-        return res.status(400).json({
-            success: false,
-            message: "All fields are required"
-        });
+        return next(errorHandler(400, "All fields are required"));
     }
 
     if(!validator.isEmail(user.email) || !validator.contains(user.email, "ves.ac.in")) {
-        return res.status(400).json({
-            success: false,
-            message: "Invalid email"
-        });
+        return next(errorHandler(400, "Invalid email"));
     }
 
     if(user.password.length < 8) {
-        return res.status(400).json({
-            success: false,
-            message: "Password must be at least 8 characters long"
-        });
+        return next(errorHandler(400, "Password must be at least 8 characters long"));
     }
 
     if(user.password !== user.confirmPassword) {
-        return res.status(400).json({
-            success: false,
-            message: "Passwords do not match"
-        });
+        return next(errorHandler(400, "Passwords do not match"));
     }
 
     try {
         const existingUser = await User.findOne({email: user.email});
-        if(existingUser) return res.status(400).json({
-            success: false,
-            message: "Username already exists"
-        });
+        if(existingUser) return next(errorHandler(400, "User already exists"));
 
         const newUser = await User.create({
             userName: user.userName,
@@ -54,40 +40,38 @@ export const register = async (req, res) => {
         return res.status(201).json({
             success: true,
             message: "User created successfully",
+            user: newUser
         });
     } catch (error) {
         console.log("Error in authController (register)", error.message)
-        return res.status(500).json({
-            success: false,
-            message: "Internal Server Error"
-        });
+        return next(errorHandler(500, "Internal Server Error"));
     }
 }
 
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
     const user = req.body;
 
     if(!user.email || !user.password) {
-        return res.status(400).json({message: "All fields are required"});
+        return next(errorHandler(400, "All fields are required"));
     }
 
     if(!validator.isEmail(user.email) || !validator.contains(user.email, "ves.ac.in")) {
-        return res.status(400).json({message: "Invalid email"});
+        return next(errorHandler(400, "Invalid email"));
     }
 
     try {
         const existingUser = await User.findOne({email: user.email});
 
-        if(!existingUser) return res.status(404).json({message: "Invalid credentials"});
+        if(!existingUser) return next(errorHandler(400, "Invalid credentials"));
 
-        if(existingUser.password !== user.password) return res.status(400).json({
-            success: false,
-            message: "Invalid credentials"
-        });
+        if(existingUser.password !== user.password) return next(errorHandler(400, "Invalid credentials"));
 
-        const token = jwt.sign({user: req.user}, JWT_SECRET, {expiresIn: "1h"});
+        const token = jwt.sign({id: existingUser.id}, JWT_SECRET, {expiresIn: "1h"});
 
-        if(!token) return res.status(500).json({message: "Failed to generate token"});
+        if(!token){
+            console.log("Error in authController (login) Fialed to generate token (token)");
+            return next(errorHandler(500, "Internal Server Error"));
+        }
 
         return res.cookie("token", token, {
             httpOnly: true, 
@@ -99,32 +83,25 @@ export const login = async (req, res) => {
         .json({
             success: true,
             message: "Login successful",
-            payload: {
-                userName: existingUser.userName,
-                fullName: existingUser.fullName
-            }
+            user: existingUser
         });
     } catch (error) {
         console.log("Error in authController (login)", error.message)
-        return res.status(500).json({
-            success: false,
-            message: "Internal Server Error",
-        });
+        return next(errorHandler(500, "Internal Server Error"));
     }
 }
 
-export const logout = (req, res) => {
-    try {
-        if(!req.cookies.token) return res.status(401).json({message: "Unauthorized"});
-        const validate = jwt.verify(req.cookies.token, JWT_SECRET);
-        if(!validate) return res.status(401).json({message: "Unauthorized"});
-        
+export const logout = (req, res, next) => {
+    try {       
         return res
             .clearCookie("token")
             .status(200)
-            .json({message: "Logout successful"});
+            .json({
+                success: true,
+                message: "Logout successful"
+            });
     } catch (error) {
         console.log("Error in authController (logout)", error.message)
-        return res.status(500).json({message: "Internal Server Error"});
+        return next(errorHandler(500, "Internal Server Error"));
     }
 }

@@ -139,24 +139,24 @@ const CreateProject = () => {
             <div className='flex flex-col gap-3 rounded-md w-full'>
                 <div className='flex gap-2'>
                     <input ref={mentorRef} className='p-2 rounded-md border-2 w-full' type="text" placeholder='Enter Mentor Name' />
-                    <button type='button' onClick={handleAdd} name='mentors' className='p-2 rounded-md bg-gray-700 text-white hover:opacity-85 disabled:opacity-50'>Add</button>
+                    <button type='button' onClick={handleAdd} name='mentors' className='p-2 rounded-md bg-gray-700 text-white hover:opacity-90 disabled:opacity-75'>Add</button>
                 </div>
                 {
                     project.mentors.map((mentor, index) => (
                         <div key={mentor.name} className='flex gap-2 items-center px-2'>
-                            <button onClick={(e) => handleDelete(e, index)} name='mentor' type='button' className='p-1 rounded-md text-xs bg-red-700 text-white hover:opacity-85 disabled:opacity-50'>Delete</button>
+                            <button onClick={(e) => handleDelete(e, index)} name='mentor' type='button' className='p-1 rounded-md text-xs bg-red-700 text-white hover:opacity-90 disabled:opacity-75'>Delete</button>
                             <p className='text-sm leading-3'>{mentor.name}</p>
                         </div>
                     ))
                 }
                 <div className='flex gap-2'>
                     <input ref={teamMemberRef} className='p-2 rounded-md border-2 w-full' type="email" placeholder='Enter Team Member Email' />
-                    <button type='button' onClick={handleAdd} name='team' className='p-2 rounded-md bg-gray-700 text-white hover:opacity-85 disabled:opacity-50'>Add</button>
+                    <button type='button' onClick={handleAdd} name='team' className='p-2 rounded-md bg-gray-700 text-white hover:opacity-90 disabled:opacity-75'>Add</button>
                 </div>
                 {
                     project.team.map((member, index) => (
                         <div key={member} className='flex gap-2 items-center px-2'>
-                            <button onClick={(e) => handleDelete(e, index)} name='member' type='button' className='p-1 rounded-md text-xs bg-red-700 text-white hover:opacity-85 disabled:opacity-50'>Delete</button>
+                            <button onClick={(e) => handleDelete(e, index)} name='member' type='button' className='p-1 rounded-md text-xs bg-red-700 text-white hover:opacity-90 disabled:opacity-75'>Delete</button>
                             <p className='text-sm leading-3'>{member}</p>
                         </div>
                     ))
@@ -164,7 +164,7 @@ const CreateProject = () => {
             </div>
         </div>
         <div className='text-center align-center w-[85%] mt-5 md:w-[25%]'>
-            <button onClick={handleSubmit} className='p-2 rounded-md bg-gray-700 text-white w-full hover:opacity-85 disabled:opacity-50'>Submit</button>
+            <button onClick={handleSubmit} className='p-2 rounded-md bg-gray-700 text-white w-full hover:opacity-90 disabled:opacity-75'>Submit</button>
         </div>
     </div>
   )

@@ -8,7 +8,7 @@ const Mentors = ({ mentors }) => {
         {mentors &&
           mentors.map((mentor) => (
             <div key={mentor._id}>
-                <li>{mentor.name} </li>
+                <li className="leading-5 md:max-w-[6rem]">{mentor.name} {mentor.name} {mentor.name} {mentor.name}</li>
             </div>
           ))}
       </ul>

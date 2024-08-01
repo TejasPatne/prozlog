@@ -8,8 +8,8 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        minLength: 8,
-        maxLength: 20,
+        min: 8,
+        max: 20,
         required: true
     },
     fullName: {
@@ -27,6 +27,7 @@ const userSchema = new mongoose.Schema({
         versionKey: false,
         transform(doc, ret) {
             delete ret.__v;
+            delete ret.password;
             delete ret.updatedAt;
         }
     }
