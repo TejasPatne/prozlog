@@ -7,7 +7,7 @@ const Team = ({ team }) => {
       <h2 className="text-xl mb-5">Team: </h2>
       <ul className="grid lg:grid-cols-2 gap-3 text-gray-500">
         {team.map((member) => (
-          <li key={member._id} className="flex md:justify-between items-center gap-1">
+          <li key={member._id} className="flex md:justify-start items-center gap-2">
             <div className="">
               <img className="w-14 h-14 rounded-full" src={member.avatar.url} alt="profile" />
             </div>

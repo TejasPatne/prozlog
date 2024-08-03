@@ -5,7 +5,10 @@ import User from "../models/userModel.js";
 import { errorHandler } from "../utils/errorHandler.js";
 
 export const create = async (req, res, next) => {
+    const authUser = req.user;
     let project = req.body;
+
+    if(!authUser) return next(errorHandler(401, "Unauthorized"));
 
     if(!project.title || !project.domain || !project.description){
         return next(errorHandler(400, "All fields are required"));
@@ -37,7 +40,10 @@ export const create = async (req, res, next) => {
         const validate = jwt.verify(req.cookies.token, JWT_SECRET);
         if(!validate) return next(errorHandler(401, "Unauthorized"));
 
-        const newProject = await Project.create(project);
+        const newProject = await Project.create({
+            ...project,
+            createdBy: authUser.id
+        });
         
         return res.status(200).json({
             success: true,
@@ -73,6 +79,8 @@ export const remove = async (req, res, next) => {
 export const update = async (req, res, next) => {
     const { id } = req.params;
     const project = req.body;
+    const authUser = req.user;
+
     try {
         if(!req.cookies.token) return next(errorHandler(401, "Unauthorized"));
         const validate = jwt.verify(req.cookies.token, JWT_SECRET);
@@ -83,20 +91,23 @@ export const update = async (req, res, next) => {
         const existingProject = await Project.findById(id);
         if(!existingProject) return next(errorHandler(404, "Project not found"));
 
+        if(authUser.id !== existingProject.createdBy.toString()) return next(errorHandler(401, "Unauthorized"));
+
         if(project.team && project.team.length !== 0){
             const teamMembers = await User.find({
                 email: {
                     $in: project.team
                 }
             });
-            if(teamMembers?.length !== project.team.length){
-                return next(errorHandler(400, "Team members not found. Please provide valid email of all team members"))
+            
+            if(teamMembers.length !== project.team.length){
+                return next(errorHandler(400, "Invalid team members"));
             }
             project.team = teamMembers;
         }
 
         const updatedProject = await Project.findByIdAndUpdate(id, {
-            existingProject, ...project
+            existingProject, ...project,
         }, { new: true });
 
         return res.status(200).json({
@@ -115,7 +126,7 @@ export const getProject = async (req, res, next) => {
     const { id } = req.params;
 
     try {
-        const project = await Project.findById(id).populate("team");
+        const project = await Project.findById(id).populate("team").populate("createdBy");
         if(!project) return next(errorHandler(404, "Project not found"));
         return res.status(200).json({
             success: true,
@@ -151,7 +162,6 @@ export const getAllProjects = async (req, res, next) => {
             })
         } else {
             const projects = await Project.find().populate("team");
-            console.log(projects);
             return res.status(200).json({
                 success: true,
                 projects

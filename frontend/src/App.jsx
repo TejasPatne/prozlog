@@ -10,6 +10,7 @@ import Profile from './pages/profile/Profile'
 import About from './pages/about/About'
 import Contact from './pages/contact/Contact'
 import Footer from './layouts/Footer'
+import UpdateProject from './pages/project/UpdateProject'
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
           <Route path="" element={<Projects />} />
           <Route path="new" element={<CreateProject />} />
           <Route path=":id" element={<Project />} />
+          <Route path=":id/update" element={<UpdateProject />} />
         </Route>
         <Route path="/profile">
           <Route path=":id" element={<Profile />} />

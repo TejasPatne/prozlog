@@ -11,8 +11,10 @@ import seniors5 from "/seniors/seniors5.jpg";
 import seniors6 from "/seniors/seniors6.jpg";
 import { Link } from "react-router-dom";
 import SEO from "../../utility/SEO";
+import { useAuthContext } from "../../context/AuthContext";
 
 const Home = () => {
+  const { authUser } = useAuthContext();
   const itemData = [
     {
       img: seniors1,
@@ -59,7 +61,7 @@ const Home = () => {
             This is intiative project by VESIT, Department of AI and Data
             Science. We aim to help students get their final year projects done.{" "}
           </p>
-          <Link to={"/projects/new"} className="mt-5 bg-gray-700 w-40 hover:opacity-90 border text-white py-2 px-4 rounded-md">
+          <Link to={authUser? "/projects/new": "/signin"} className="mt-5 bg-gray-700 w-40 hover:opacity-90 border text-white py-2 px-4 rounded-md">
             Add Your Project
           </Link>
         </div>

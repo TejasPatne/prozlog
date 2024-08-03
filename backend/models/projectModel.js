@@ -44,6 +44,11 @@ const projectSchema = new mongoose.Schema(
       ],
       maxLength: 4,
     },
+    createdBy: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+      required: true
+    }
   },
   { timestamps: true }
 );

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Team from "./components/Team";
 import Mentors from "./components/Mentors";
 import SEO from "../../utility/SEO";
+import { useAuthContext } from "../../context/AuthContext";
+import EditIcon from '@mui/icons-material/Edit';
 
 const Project = () => {
   const [project, setProject] = useState({
@@ -13,9 +15,11 @@ const Project = () => {
     github: "",
     mentors: [],
     team: [],
+    createdBy: null,
   });
   const { id } = useParams();
   const navigate = useNavigate();
+  const { authUser } = useAuthContext();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,8 +45,15 @@ const Project = () => {
       <SEO title={project.title} description={project.description} name="Vivekanand Education Society's Institute of Technology, Chembur" type="website" />
 
       <div className="flex flex-col text-left w-[85%] mt-10 mx-auto">
-      <h1 className="text-3xl w-full font-bold">{project.title}</h1>
-      <h2> Domain: {project.domain} </h2>
+      <h1 className="text-3xl w-full font-bold mb-5">{project.title}</h1>
+      <h2>{project.domain} </h2>
+      <div>
+        {
+          project?.createdBy?._id === authUser?._id ?
+          <Link to={`/projects/${project._id}/update`} className="bg-yellow-500 text-white text-sm font-semibold px-2 py-1 my-2 rounded-md cursor-pointer"><EditIcon fontSize="small" /> Edit</Link> : 
+          <h3 className="italic text-gray-500">by {project?.createdBy?.userName ?? "Anonymous" }</h3>
+        }
+      </div>
       {/* <div className="grid md:grid-cols-4 place-content-between my-5 gap-5">
         <div className="flex flex-col col-span-3">
             <p className="text-gray-500">{project.description}</p>

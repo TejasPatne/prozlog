@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import SEO from '../../utility/SEO';
+import { useAuthContext } from '../../context/AuthContext';
 
-const CreateProject = () => {
+const UpdateProject = () => {
   const [project, setProject] = useState({
     title: "",
     domain: "",
@@ -11,11 +12,14 @@ const CreateProject = () => {
     video: "",
     github: "",
     mentors: [],
-    team: []
+    team: [],
+    createdBy: null
   });
   const mentorRef = useRef(null);
   const teamMemberRef = useRef(null);
   const navigate = useNavigate();
+  const {authUser} = useAuthContext();
+  const {id} = useParams();
 
   const handleChange = (e) => {
     if(e.target.name !== "mentors" && e.target.name !== "team") {
@@ -97,9 +101,15 @@ const CreateProject = () => {
         toast.error("Please add at least yourself as a team member");
         return;
     }
+
+    // Check if the user is authorized to update the project
+    if(authUser._id !== project.createdBy._id){
+        toast.error("You are not authorized to update this project");
+        return;
+    }
     
     try {
-        const res = await fetch("/api/v1/projects/new", {
+        const res = await fetch(`/api/v1/projects/${id}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -109,15 +119,7 @@ const CreateProject = () => {
         const data = await res.json();
         if(data.success === true) {
             toast.success(data.message);
-            setProject({
-                title: "",
-                domain: "",
-                description: "",
-                video: "",
-                github: "",
-                mentors: [],
-                team: []
-            });
+            setProject(data.project);
             navigate(`/projects/${data.project._id}`);
         }
         else {
@@ -128,20 +130,48 @@ const CreateProject = () => {
     }
   }
 
+  useEffect(() => {
+    if(!authUser) {
+        navigate("/signin");
+    }
+    const fetchData = async () => {
+      try {
+        const res = await fetch(`/api/v1/projects/${id}`);
+        const data = await res.json();
+        if(data.success === true){
+          setProject({
+            ...project,
+            ...data.project,
+            team: data.project.team.map(member => member.email),
+          });
+        }
+        else{
+          navigate("/projects");
+        }
+      } catch (error) {
+        
+      }
+    };
+    fetchData();
+  }, [id]);
+
   return (
-    <section>
+    <section className='mt-20 md:mt-0'>
         {/* meta data */}
-        <SEO title="Create New Project" description="Create New Project" />
+        <SEO title={`Update Project - ${project?.title}`} description={`Update Project - ${project?.title}`} />
 
         <div className='h-screen flex flex-col gap-2 justify-center items-center'>
+
+            
         <div className='flex flex-col gap-2 w-[85%] md:w-[50%] md:flex-row mx-auto'>
             <div className='flex flex-col gap-3 rounded-md w-full'>
-                <input onChange={handleChange} className='p-2 rounded-md border-2' name='title' type="text" placeholder='Enter Title' />
-                <input onChange={handleChange} className='p-2 rounded-md border-2' name='domain' type="text" placeholder='Enter Domain' />
-                <textarea onChange={handleChange} className='p-2 rounded-md border-2' name='description' placeholder='Describe Your Project' />
-                <input onChange={handleChange} className='p-2 rounded-md border-2' name='video' type="text" placeholder='Enter Demo Video URL' />
-                <input onChange={handleChange} className='p-2 rounded-md border-2' name='github' type="text" placeholder='Enter GitHub URL' />
+                <input onChange={handleChange} value={project?.title} className='p-2 rounded-md border-2' name='title' type="text" placeholder='Enter Title' />
+                <input onChange={handleChange} value={project?.domain} className='p-2 rounded-md border-2' name='domain' type="text" placeholder='Enter Domain' />
+                <textarea onChange={handleChange} value={project?.description} className='p-2 rounded-md border-2' name='description' placeholder='Describe Your Project' />
+                <input onChange={handleChange} value={project?.video} className='p-2 rounded-md border-2' name='video' type="text" placeholder='Enter Demo Video URL' />
+                <input onChange={handleChange} value={project?.github} className='p-2 rounded-md border-2' name='github' type="text" placeholder='Enter GitHub URL' />
             </div>
+            
             <div className='flex flex-col gap-3 rounded-md w-full'>
                 <div className='flex gap-2'>
                     <input ref={mentorRef} className='p-2 rounded-md border-2 w-full' type="text" placeholder='Enter Mentor Name' />
@@ -169,12 +199,14 @@ const CreateProject = () => {
                 }
             </div>
         </div>
+
+
         <div className='text-center align-center w-[85%] mt-5 md:w-[25%]'>
-            <button onClick={handleSubmit} className='p-2 rounded-md bg-gray-700 text-white w-full hover:opacity-90 disabled:opacity-75'>Submit</button>
+            <button onClick={handleSubmit} className='p-2 rounded-md bg-gray-700 text-white w-full hover:opacity-90 disabled:opacity-75'>Update</button>
         </div>
     </div>
     </section>
   )
 }
 
-export default CreateProject
+export default UpdateProject
