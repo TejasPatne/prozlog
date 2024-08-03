@@ -4,15 +4,18 @@ import { Link } from "react-router-dom";
 const Team = ({ team }) => {
   return (
     <div className="w-full">
-      <h2 className="text-xl">Team: </h2>
-      <ul className="grid gap-3 md:grid-rows-2 md:grid-cols-2 text-gray-500">
+      <h2 className="text-xl mb-5">Team: </h2>
+      <ul className="grid lg:grid-cols-2 gap-3 text-gray-500">
         {team.map((member) => (
-          <div className="grid grid-cols-2 md:grid-rows-2 md:grid-cols-1 text-gray-500" key={member._id}> 
-            <li> {member.userName} </li>
-            <li className="text-yellow-500 underline underline-offset-4"> 
-              <Link to={"mailto:" + member.email}>{member.email}</Link>
-            </li>
-          </div>
+          <li key={member._id} className="flex md:justify-between items-center gap-1">
+            <div className="">
+              <img className="w-14 h-14 rounded-full" src={member.avatar.url} alt="profile" />
+            </div>
+            <div className="flex flex-col">
+              <p className="font-semibold">{member.userName}</p>
+              <Link className="text-sm text-yellow-500" to={`/profile/${member._id}`}>View Profile</Link>
+            </div>
+          </li>
         ))}
       </ul>
     </div>

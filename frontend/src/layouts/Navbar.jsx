@@ -18,9 +18,10 @@ import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
 import { useAuthContext } from "../context/AuthContext";
 import { useSignOut } from "../hooks/useSignOut";
+import collegeLogo from "/collegeLogo.png";
 
 const pages = ["projects", "about", "contact"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = ["Profile", "Logout"];
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -101,23 +102,23 @@ function Navbar() {
     <AppBar position="static" color="transparent">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
+          <img className="w-5 mr-2 hidden lg:inline" src={collegeLogo} alt="college logo" />
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
+            component="div"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
+              fontFamily: "cursive",
               fontWeight: 700,
-              letterSpacing: ".3rem",
+              letterSpacing: ".1rem",
               color: "inherit",
               textDecoration: "none",
             }}
           >
-            <Link to={"/"}>LOGO</Link>
+            <Link to={"/"}>AI&DS</Link>
           </Typography>
 
           {/* Nav Menu */}
@@ -152,7 +153,7 @@ function Navbar() {
             >
               {pages.map((page) => (
                 <Link key={page} to={`/${page}`}>
-                  <MenuItem onClick={handleCloseNavMenu}>
+                  <MenuItem onClick={handleCloseNavMenu}> 
                     <Typography textAlign="center">{page}</Typography>
                   </MenuItem>
                 </Link>
@@ -161,24 +162,24 @@ function Navbar() {
           </Box>
 
           {/* Logo */}
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          {/* <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} /> */}
+          <img className="w-5 mr-2 lg:hidden" src={collegeLogo} alt="college logo" />
           <Typography
             variant="h5"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
+            component="div"
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
               flexGrow: 1,
-              fontFamily: "monospace",
+              fontFamily: "cursive",
               fontWeight: 700,
-              letterSpacing: ".3rem",
+              letterSpacing: ".1rem",
               color: "inherit",
               textDecoration: "none",
             }}
           >
-            <Link to={"/"}>LOGO</Link>
+            <Link to={"/"}>AI&DS</Link>
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
@@ -215,7 +216,7 @@ function Navbar() {
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar
                       alt="Remy Sharp"
-                      src="/static/images/avatar/2.jpg"
+                      src={authUser?.avatar?.url}
                     />
                   </IconButton>
                 </Tooltip>

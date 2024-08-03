@@ -4,6 +4,8 @@ import { useAuthContext } from "../../context/AuthContext";
 import { useUpdateUser } from "../../hooks/useUpdateUser";
 import { useParams } from "react-router-dom";
 import { useGetProfile } from "../../hooks/useGetProfile";
+import ProfilePic from "./components/ProfilePic";
+import SEO from "../../utility/SEO";
 
 const Profile = () => {
   const { authUser } = useAuthContext();
@@ -15,6 +17,8 @@ const Profile = () => {
     password: "",
     confirmPassword: "",
   });
+
+  const [avatar, setAvatar] = useState(null);
 
   const { loading, updateUser } = useUpdateUser();
   const { id } = useParams();
@@ -46,15 +50,24 @@ const Profile = () => {
       fullName: profile?.fullName || "",
       email: profile?.email || "",
     });
-  }, [profile]);
+
+    setAvatar(profile?.avatar);
+  }, [profile, avatar]);
 
   return (
-    <div className="h-screen flex flex-col gap-2 justify-center items-center mx-auto w-[85%] md:w-[25%]">
-      <h1 className=" font-bold text-3xl mb-5">
+    <section>
+      {/* metadata */}
+      <SEO title={profile?.userName} description={profile?.fullName} name="Vivekanand Education Society's Institute of Technology, Chembur" type="website" />
+      
+      <div className="min-h-screen mt-10 flex flex-col gap-2 justify-center items-center mx-auto w-[85%] md:w-[25%]">
+      <h1 className="text-center font-bold text-3xl mb-5">
         {visitingOtherProfile
-          ? `About ${profile?.userName}`
-          : `Welcome👋 ${profile?.fullName}`}
+          ? `Profile`
+          : `Welcome👋 ${profile?.userName}`}
       </h1>
+      <div>
+        <ProfilePic avatar={avatar} setAvatar={setAvatar} />
+      </div>
       <div className="flex flex-col gap-3 rounded-md w-full">
         <input
           onChange={handleChange}
@@ -113,6 +126,7 @@ const Profile = () => {
         </div>
       </div>
     </div>
+    </section>
   );
 };
 

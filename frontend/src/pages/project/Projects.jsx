@@ -1,4 +1,4 @@
-import react, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { styled } from '@mui/material/styles';
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
@@ -15,6 +15,7 @@ import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Link } from "react-router-dom";
+import SEO from "../../utility/SEO";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -42,7 +43,10 @@ function Row(props) {
 
   return (
     <>
-      <StyledTableRow component={Paper} sx={{ "& > *": { borderBottom: "unset" } }}>
+      {/* metadata */}
+      <SEO title="View All Projects" description="List of all projects" name="Vivekanand Education Society's Institute of Technology, Chembur" type="website" />
+
+      <StyledTableRow>
         <StyledTableCell>
           <IconButton
             aria-label="expand row"
@@ -52,7 +56,7 @@ function Row(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </StyledTableCell>
-        <StyledTableCell className="th" component="th" scope="row">
+        <StyledTableCell component="th" scope="row">
           <Link className="underline" to={row.id}>{row.title}</Link>
         </StyledTableCell>
         <StyledTableCell>{row.domain}</StyledTableCell>
@@ -75,7 +79,7 @@ function Row(props) {
                 <TableBody>
                   {row.team.length > 0 && row.team.map((teamRow, index) => (
                     <StyledTableRow key={index}>
-                      <StyledTableCell className="th" component="th" scope="row">
+                      <StyledTableCell component="th" scope="row">
                         {teamRow.userName}
                       </StyledTableCell>
                       <StyledTableCell>{teamRow.email}</StyledTableCell> 
@@ -103,7 +107,7 @@ Row.propTypes = {
     title: PropTypes.string.isRequired,
     domain: PropTypes.string.isRequired,
     mentor: PropTypes.string.isRequired,
-  }),
+  }).isRequired,
 };
 
 const Projects = () => {
@@ -117,8 +121,8 @@ const Projects = () => {
         id: project._id,
         title: project.title,
         domain: project.domain,
-        mentor: project.mentors.length > 0 ? project.mentors[0].name: "",
-        team: project.team
+        mentor: project.mentors.length > 0 ? project.mentors[0].name : "",
+        team: project.team,
       }));
       setProjects([...filteredProjects]);
     };
@@ -135,9 +139,6 @@ const Projects = () => {
               <StyledTableCell>Title</StyledTableCell>
               <StyledTableCell>Domain</StyledTableCell>
               <StyledTableCell>Mentor</StyledTableCell>
-              {/* <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-              <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
-              <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell> */}
             </StyledTableRow>
           </TableHead>
           <TableBody>

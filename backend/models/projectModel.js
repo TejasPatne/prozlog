@@ -1,58 +1,52 @@
 import mongoose from "mongoose";
 
-const projectSchema = new mongoose.Schema({
+const projectSchema = new mongoose.Schema(
+  {
     title: {
-        type: String,
-        required: true,
-        min: 10,
-        max: 150
+      type: String,
+      required: true,
+      min: 10,
+      max: 150,
     },
     domain: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     description: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     video: {
-        type: String,
+      type: String,
     },
     github: {
-        type: String
+      type: String,
     },
     mentors: {
-        type: [
-            {
-                name: {
-                    type: String,
-                    required: true
-                }
-            }
-        ],
-        maxLength: 2,
-        required: true
+      type: [
+        {
+          name: {
+            type: String,
+            required: true,
+          },
+        },
+      ],
+      maxLength: 2,
+      required: true,
     },
     team: {
-        type: [
-            {
-                type: mongoose.Schema.ObjectId,
-                ref: "User"
-            }
-        ],
-        maxLength: 4,
-        required: true
-    }
-}, {
-    timestamp: true,
-    toJSON: {
-        versionKey: false,
-        transform(doc, ret) {
-            delete ret.__v,
-            delete ret.updatedAt
-        }
-    }
-});
+      type: [
+        {
+          type: mongoose.Schema.ObjectId,
+          ref: "User",
+          required: true,
+        },
+      ],
+      maxLength: 4,
+    },
+  },
+  { timestamps: true }
+);
 
 const Project = mongoose.model("Project", projectSchema);
 export default Project;

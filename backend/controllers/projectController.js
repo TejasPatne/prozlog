@@ -151,6 +151,7 @@ export const getAllProjects = async (req, res, next) => {
             })
         } else {
             const projects = await Project.find().populate("team");
+            console.log(projects);
             return res.status(200).json({
                 success: true,
                 projects

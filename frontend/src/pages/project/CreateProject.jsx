@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import SEO from '../../utility/SEO';
 
 const CreateProject = () => {
   const [project, setProject] = useState({
@@ -88,11 +89,11 @@ const CreateProject = () => {
         toast.error("Project description cannot be empty");
         return;
     }
-    if(!project.mentors.length === 0) {
+    if(project.mentors.length === 0) {
         toast.error("Please add at least one mentor");
         return;
     }
-    if(!project.team.length === 0) {
+    if(project.team.length === 0) {
         toast.error("Please add at least yourself as a team member");
         return;
     }
@@ -127,7 +128,11 @@ const CreateProject = () => {
     }
   }
   return (
-    <div className='h-screen flex flex-col gap-2 justify-center items-center'>
+    <section>
+        {/* meta data */}
+        <SEO title="Create New Project" description="Create New Project" />
+
+        <div className='h-screen flex flex-col gap-2 justify-center items-center'>
         <div className='flex flex-col gap-2 w-[85%] md:w-[50%] md:flex-row mx-auto'>
             <div className='flex flex-col gap-3 rounded-md w-full'>
                 <input onChange={handleChange} className='p-2 rounded-md border-2' name='title' type="text" placeholder='Enter Title' />
@@ -167,6 +172,7 @@ const CreateProject = () => {
             <button onClick={handleSubmit} className='p-2 rounded-md bg-gray-700 text-white w-full hover:opacity-90 disabled:opacity-75'>Submit</button>
         </div>
     </div>
+    </section>
   )
 }
 

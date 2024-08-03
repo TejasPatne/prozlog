@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useSignIn } from '../../hooks/useSignIn.jsx';
 import { Spinner } from '../../assets/Loading.jsx';
+import SEO from '../../utility/SEO.jsx';
 
 const SignIn = () => {
   const [user, setUser] = useState({
@@ -23,7 +24,11 @@ const SignIn = () => {
     signin(user);
   }
   return (
-    <div className='h-screen flex flex-col gap-2 justify-center items-center mx-auto w-[85%] md:w-[25%]'>
+    <section>
+      {/* metadata */}
+      <SEO title="Sign In" description="Vivekanand Education Society's Institute of Technology, Chembur" name="Vivekanand Education Society's Institute of Technology, Chembur" type="website" />
+
+      <div className='h-screen flex flex-col gap-2 justify-center items-center mx-auto w-[85%] md:w-[25%]'>
           <h1 className=' font-bold text-3xl mb-5'>Sign In</h1>
           <div className='flex flex-col gap-3 rounded-md w-full'>
             <input onChange={handleChange} className='p-2 rounded-md border-2' name='email' type="email" placeholder='Enter Email' />
@@ -38,6 +43,7 @@ const SignIn = () => {
             </div>
           </div>
     </div>
+    </section>
   )
 }
 

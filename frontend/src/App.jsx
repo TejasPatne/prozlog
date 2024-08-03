@@ -7,6 +7,9 @@ import CreateProject from './pages/project/CreateProject'
 import Project from './pages/project/Project'
 import Projects from './pages/project/Projects'
 import Profile from './pages/profile/Profile'
+import About from './pages/about/About'
+import Contact from './pages/contact/Contact'
+import Footer from './layouts/Footer'
 
 function App() {
 
@@ -17,6 +20,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/projects">
           <Route path="" element={<Projects />} />
           <Route path="new" element={<CreateProject />} />
@@ -26,6 +31,7 @@ function App() {
           <Route path=":id" element={<Profile />} />
         </Route>
       </Routes>
+      <Footer />
     </BrowserRouter>
   )
 }

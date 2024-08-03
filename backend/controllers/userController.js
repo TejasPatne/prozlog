@@ -1,3 +1,4 @@
+import cloudinary from "../config/cloudinary.js";
 import User from "../models/userModel.js";
 import { errorHandler } from "../utils/errorHandler.js";
 
@@ -56,3 +57,38 @@ export const getUser = async (req, res, next) => {
         return next(errorHandler(500, "Internal Server Error"));
     }
 }
+
+export const avatar = async (req, res, next) => {
+    const { id } = req.user;
+    
+    try {
+        const existingUser = await User.findById(id);
+        if(!existingUser) return next(errorHandler(404, "User not found"));
+
+        if(!req.file) return next(errorHandler(400, "No file was uploaded"));
+        if(existingUser.avatar?.public_id !== ""){
+            await cloudinary.uploader.destroy(existingUser.avatar.public_id);
+        }
+
+        // Upload new image
+        const { path, filename } = req.file;
+        const public_id = filename;
+
+        // Update user's avatar in the database
+        existingUser.avatar = {
+            public_id: public_id,
+            url: path
+        };
+        await existingUser.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Profile picture updated successfully",
+            user: existingUser
+        });  
+    } catch (error) {
+        console.log("Error in userController (avatar)", error.message);
+        return next(errorHandler(500, "Internal Server Error"));
+    }
+
+  }

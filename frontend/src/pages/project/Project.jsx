@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Team from "./components/Team";
 import Mentors from "./components/Mentors";
+import SEO from "../../utility/SEO";
 
 const Project = () => {
   const [project, setProject] = useState({
@@ -14,18 +15,32 @@ const Project = () => {
     team: [],
   });
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(`/api/v1/projects/${id}`);
-      const data = await res.json();
-      setProject(data.project);
+      try {
+        const res = await fetch(`/api/v1/projects/${id}`);
+        const data = await res.json();
+        if(data.success === true){
+          setProject(data.project);
+        }
+        else{
+          navigate("/projects");
+        }
+      } catch (error) {
+        
+      }
     };
     fetchData();
   }, [id, project.title]);
 
   return (
-    <div className="flex flex-col text-left w-[85%] mt-10 mx-auto">
+    <section>
+      {/* metadata */}
+      <SEO title={project.title} description={project.description} name="Vivekanand Education Society's Institute of Technology, Chembur" type="website" />
+
+      <div className="flex flex-col text-left w-[85%] mt-10 mx-auto">
       <h1 className="text-3xl w-full font-bold">{project.title}</h1>
       <h2> Domain: {project.domain} </h2>
       {/* <div className="grid md:grid-cols-4 place-content-between my-5 gap-5">
@@ -42,8 +57,8 @@ const Project = () => {
       <div className="flex flex-col md:flex-row my-5 gap-5">
         <div className="flex flex-col flex-1">
             <p className="text-gray-500">{project.description}</p>
-            <a href={project.video} className="text-yellow-500 underline underline-offset-4 italic cursor-pointer">Demo</a>
-            <a href={project.github} className="text-yellow-500 underline underline-offset-4 italic cursor-pointer">Code</a>
+            <a target="_blank" href={project.video} className="text-yellow-500 underline underline-offset-4 italic cursor-pointer">Demo</a>
+            <a target="_blank" href={project.github} className="text-yellow-500 underline underline-offset-4 italic cursor-pointer">Code</a>
         </div>
         <div className="flex-grow-0 col-span-1">
             <Mentors mentors={project.mentors} />
@@ -51,6 +66,7 @@ const Project = () => {
         </div>
       </div>
     </div>
+    </section>
   );
 };
 

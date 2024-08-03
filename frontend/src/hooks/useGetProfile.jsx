@@ -17,7 +17,8 @@ export const useGetProfile = () => {
                     ...profile,
                     userName: data.user.userName,
                     fullName: data.user.fullName,
-                    email: data.user.email
+                    email: data.user.email,
+                    avatar: data.user.avatar
                 });
             } else {
                 toast.error(data.message);

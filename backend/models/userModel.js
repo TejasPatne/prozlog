@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { DEFAULT_PROFILE_PIC } from "../config/env.js";
 
 const userSchema = new mongoose.Schema({
     userName: {
@@ -20,6 +21,17 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true
+    },
+    avatar:{
+        public_id: {
+            type: String,
+            default: "",
+        },
+        url: {
+            type: String,
+            required: true,
+            default: DEFAULT_PROFILE_PIC
+        }
     }
 }, { 
     timestamps: true, 
