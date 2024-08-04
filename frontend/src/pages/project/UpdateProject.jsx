@@ -4,6 +4,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import SEO from '../../utility/SEO';
 import { useAuthContext } from '../../context/AuthContext';
 
+const Backend_URL = import.meta.env.VITE_BACKEND_URL;
+
 const UpdateProject = () => {
   const [project, setProject] = useState({
     title: "",
@@ -109,7 +111,7 @@ const UpdateProject = () => {
     }
     
     try {
-        const res = await fetch(`/api/v1/projects/${id}`, {
+        const res = await fetch(Backend_URL + `/api/v1/projects/${id}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -136,7 +138,7 @@ const UpdateProject = () => {
     }
     const fetchData = async () => {
       try {
-        const res = await fetch(`/api/v1/projects/${id}`);
+        const res = await fetch(Backend_URL + `/api/v1/projects/${id}`);
         const data = await res.json();
         if(data.success === true){
           setProject({

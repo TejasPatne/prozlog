@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 
+const Backend_URL = import.meta.env.VITE_BACKEND_URL;
+
 export const useGetProfile = () => {
     const [profile, setProfile] = useState(null);
     const { id } = useParams();
@@ -9,7 +11,7 @@ export const useGetProfile = () => {
     const getProfile = async () => {
 
         try {
-            const res = await fetch(`/api/v1/users/${id}`);
+            const res = await fetch(Backend_URL + `/api/v1/users/${id}`);
             const data = await res.json();
 
             if(data.success === true){

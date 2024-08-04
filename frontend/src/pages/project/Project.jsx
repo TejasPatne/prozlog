@@ -6,6 +6,8 @@ import SEO from "../../utility/SEO";
 import { useAuthContext } from "../../context/AuthContext";
 import EditIcon from '@mui/icons-material/Edit';
 
+const Backend_URL = import.meta.env.VITE_BACKEND_URL;
+
 const Project = () => {
   const [project, setProject] = useState({
     title: "",
@@ -24,7 +26,7 @@ const Project = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`/api/v1/projects/${id}`);
+        const res = await fetch(Backend_URL + `/api/v1/projects/${id}`);
         const data = await res.json();
         if(data.success === true){
           setProject(data.project);

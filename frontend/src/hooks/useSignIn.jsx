@@ -3,6 +3,8 @@ import { useAuthContext } from "../context/AuthContext";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
+const Backend_URL = import.meta.env.VITE_BACKEND_URL;
+
 export const useSignIn = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -15,7 +17,7 @@ export const useSignIn = () => {
         setLoading(true);
 
         try {
-            const res = await fetch("/api/v1/auth/login", {
+            const res = await fetch(Backend_URL + "/api/v1/auth/login", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json"

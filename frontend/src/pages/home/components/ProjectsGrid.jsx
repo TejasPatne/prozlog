@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import GlobalSpinner from "../../../utility/GlobalSpinner";
 
+const Backend_URL = import.meta.env.VITE_BACKEND_URL;
+
 const VISIBLE_FIELDS = ["name", "rating", "country", "dateCreated", "isAdmin"];
 
 const ProjectGrid = () => {
@@ -31,7 +33,7 @@ const ProjectGrid = () => {
 
   useEffect(() => {
     const fetchProjects = async () => {
-      const res = await fetch("/api/v1/projects");
+      const res = await fetch(Backend_URL + "/api/v1/projects");
       const data = await res.json();
       const filteredProjects = data.projects.map((project) => ({
         id: project._id,

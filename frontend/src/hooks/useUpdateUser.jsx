@@ -3,6 +3,8 @@ import { useAuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
+const Backend_URL = import.meta.env.VITE_BACKEND_URL;
+
 export const useUpdateUser = () => {
     const { authUser, setAuthUser } = useAuthContext();
     const [loading, setLoading] = useState(false);
@@ -25,7 +27,7 @@ export const useUpdateUser = () => {
         
         setLoading(true);
         try {
-            const res = await fetch(`/api/v1/users/update/${authUser._id}`, {
+            const res = await fetch(Backend_URL + `/api/v1/users/update/${authUser._id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

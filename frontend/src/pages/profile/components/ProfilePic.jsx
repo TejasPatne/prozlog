@@ -6,6 +6,8 @@ import profile from "../../../assets/profile.jpg"
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
+const Backend_URL = import.meta.env.VITE_BACKEND_URL;
+
 const ProfilePic = ({avatar, setAvatar}) => {
   const { authUser, setAuthUser } = useAuthContext();
 
@@ -30,7 +32,7 @@ const ProfilePic = ({avatar, setAvatar}) => {
     try {
       const formData = new FormData();
       formData.append("image", ref.current.files[0]);
-      const res = await fetch("/api/v1/users/upload", {
+      const res = await fetch(Backend_URL + "/api/v1/users/upload", {
         method: "POST",
         body: formData,
       });

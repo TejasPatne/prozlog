@@ -17,6 +17,8 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Link } from "react-router-dom";
 import SEO from "../../utility/SEO";
 
+const Backend_URL = import.meta.env.VITE_BACKEND_URL;
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -115,7 +117,7 @@ const Projects = () => {
 
   useEffect(() => {
     const fetchProjects = async () => {
-      const res = await fetch("/api/v1/projects");
+      const res = await fetch(Backend_URL + "/api/v1/projects");
       const data = await res.json();
       const filteredProjects = data.projects.map((project) => ({
         id: project._id,

@@ -3,6 +3,8 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import SEO from '../../utility/SEO';
 
+const Backend_URL = import.meta.env.VITE_BACKEND_URL;
+
 const CreateProject = () => {
   const [project, setProject] = useState({
     title: "",
@@ -99,7 +101,7 @@ const CreateProject = () => {
     }
     
     try {
-        const res = await fetch("/api/v1/projects/new", {
+        const res = await fetch(Backend_URL + "/api/v1/projects/new", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
