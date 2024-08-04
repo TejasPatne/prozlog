@@ -32,15 +32,15 @@ const Contact = () => {
   const sendEmail = async (e) => {
     e.preventDefault();
     setLoading(true);
+    
+    if(!authUser) {
+      toast.error("Please login to continue");
+      return;
+    }
 
     // check if all fields are filled
     if(!form.current.user_name.value || !form.current.user_email.value || !form.current.message.value.trim()) {
       toast.error("Please fill all the fields");
-      return;
-    }
-
-    if(!authUser) {
-      toast.error("Please login to continue");
       return;
     }
 

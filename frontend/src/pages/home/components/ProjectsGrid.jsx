@@ -4,6 +4,7 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useState } from "react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import GlobalSpinner from "../../../utility/GlobalSpinner";
 
 const VISIBLE_FIELDS = ["name", "rating", "country", "dateCreated", "isAdmin"];
 
@@ -45,6 +46,8 @@ const ProjectGrid = () => {
   }, []);
 
   return (
+    !rows.length > 0? 
+    <GlobalSpinner />:
     <div style={{ height: 400, width: "90%", margin: "auto" }}>
       <DataGrid
         rows={rows}

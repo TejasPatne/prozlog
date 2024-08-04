@@ -1,9 +1,10 @@
+import path from "path";
 import dotenv from "dotenv";
-import path from "path"
 
 const __dirname = path.resolve();
 
-dotenv.config({ path: path.resolve(__dirname, 'config/.env') })
+// config
+dotenv.config({ path: path.resolve(__dirname, "config/.env") });
 
 export const PORT = process.env.PORT
 export const MONGO = process.env.MONGO
@@ -14,3 +15,5 @@ export const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY;
 export const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET;
 
 export const DEFAULT_PROFILE_PIC = process.env.DEFAULT_PROFILE_PIC;
+
+export const FRONTEND_URL = process.env.DEFAULT_PROFILE_PIC;

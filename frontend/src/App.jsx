@@ -11,6 +11,7 @@ import About from './pages/about/About'
 import Contact from './pages/contact/Contact'
 import Footer from './layouts/Footer'
 import UpdateProject from './pages/project/UpdateProject'
+import PageNotFound from './utility/PageNotFound'
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
         <Route path="/profile">
           <Route path=":id" element={<Profile />} />
         </Route>
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
       <Footer />
     </BrowserRouter>

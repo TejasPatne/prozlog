@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import { useGetProfile } from "../../hooks/useGetProfile";
 import ProfilePic from "./components/ProfilePic";
 import SEO from "../../utility/SEO";
+import GlobalSpinner from "../../utility/GlobalSpinner";
 
 const Profile = () => {
   const { authUser } = useAuthContext();
@@ -55,6 +56,8 @@ const Profile = () => {
   }, [profile, avatar]);
 
   return (
+    !profile? 
+    <GlobalSpinner />:
     <section>
       {/* metadata */}
       <SEO title={profile?.userName} description={profile?.fullName} name="Vivekanand Education Society's Institute of Technology, Chembur" type="website" />

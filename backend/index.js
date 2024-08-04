@@ -2,12 +2,20 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
+import path from "path";
+import dotenv from "dotenv";
+import cors from "cors";
 
 // file imports
 import router from "./routes/index.js";
-import { PORT } from "./config/env.js";
+import { FRONTEND_URL, PORT } from "./config/env.js";
 import { connectToDB } from "./config/db.js";
 import { errorMiddleware } from "./middleware/errorMiddleware.js";
+
+const __dirname = path.resolve();
+
+// config
+dotenv.config({ path: path.resolve(__dirname, "backend/config/.env") });
 
 const app = express();
 
@@ -15,6 +23,10 @@ const app = express();
 connectToDB();
 
 // middlewares
+app.use(cors({
+    origin: FRONTEND_URL,
+    credentials: true
+}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
