@@ -6,7 +6,7 @@ import SEO from "../../utility/SEO";
 import { useAuthContext } from "../../context/AuthContext";
 import EditIcon from '@mui/icons-material/Edit';
 
-const Backend_URL = import.meta.env.VITE_BACKEND_URL;
+const Backend_URL = import.meta.env.VITE_REACT_BACKEND_URL;
 
 const Project = () => {
   const [project, setProject] = useState({

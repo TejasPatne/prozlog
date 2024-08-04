@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import GlobalSpinner from "../../../utility/GlobalSpinner";
 
-const Backend_URL = import.meta.env.VITE_BACKEND_URL;
+const Backend_URL = import.meta.env.VITE_REACT_BACKEND_URL;
 
 const VISIBLE_FIELDS = ["name", "rating", "country", "dateCreated", "isAdmin"];
 

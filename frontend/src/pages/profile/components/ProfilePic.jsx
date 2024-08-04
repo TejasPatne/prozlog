@@ -6,7 +6,7 @@ import profile from "../../../assets/profile.jpg"
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
-const Backend_URL = import.meta.env.VITE_BACKEND_URL;
+const Backend_URL = import.meta.env.VITE_REACT_BACKEND_URL;
 
 const ProfilePic = ({avatar, setAvatar}) => {
   const { authUser, setAuthUser } = useAuthContext();

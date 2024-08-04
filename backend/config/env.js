@@ -16,4 +16,4 @@ export const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET;
 
 export const DEFAULT_PROFILE_PIC = process.env.DEFAULT_PROFILE_PIC;
 
-export const FRONTEND_URL = process.env.DEFAULT_PROFILE_PIC;
+export const FRONTEND_URL = process.env.FRONTEND_URL;

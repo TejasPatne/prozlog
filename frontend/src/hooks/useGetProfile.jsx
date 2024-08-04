@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 
-const Backend_URL = import.meta.env.VITE_BACKEND_URL;
+const Backend_URL = import.meta.env.VITE_REACT_BACKEND_URL;
 
 export const useGetProfile = () => {
     const [profile, setProfile] = useState(null);

@@ -3,7 +3,7 @@ import { useAuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-const Backend_URL = import.meta.env.VITE_BACKEND_URL;
+const Backend_URL = import.meta.env.VITE_REACT_BACKEND_URL;
 
 export const useUpdateUser = () => {
     const { authUser, setAuthUser } = useAuthContext();

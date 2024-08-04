@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import SEO from '../../utility/SEO';
 import { useAuthContext } from '../../context/AuthContext';
 
-const Backend_URL = import.meta.env.VITE_BACKEND_URL;
+const Backend_URL = import.meta.env.VITE_REACT_BACKEND_URL;
 
 const UpdateProject = () => {
   const [project, setProject] = useState({
