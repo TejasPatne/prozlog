@@ -8,7 +8,7 @@ import cors from "cors";
 
 // file imports
 import router from "./routes/index.js";
-import { FRONTEND_URL, PORT } from "./config/env.js";
+import { DEFAULT_PROFILE_PIC, FRONTEND_URL, PORT } from "./config/env.js";
 import { connectToDB } from "./config/db.js";
 import { errorMiddleware } from "./middleware/errorMiddleware.js";
 
