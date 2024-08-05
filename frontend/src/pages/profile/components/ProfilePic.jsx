@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Grid from "@mui/material/Grid";
 import EditIcon from "@mui/icons-material/Edit";
 import { useAuthContext } from "../../../context/AuthContext";
-import profile from "../../../assets/profile.jpg"
+import profile from "../../../assets/profile.webp"
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 

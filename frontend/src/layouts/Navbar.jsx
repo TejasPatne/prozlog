@@ -18,7 +18,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
 import { useAuthContext } from "../context/AuthContext";
 import { useSignOut } from "../hooks/useSignOut";
-import collegeLogo from "/collegeLogo.png";
+import collegeLogo from "/collegeLogo.webp";
 
 const pages = ["projects", "about", "contact"];
 const settings = ["Profile", "Logout"];
